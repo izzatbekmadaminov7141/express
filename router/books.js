@@ -2,7 +2,7 @@ const { Router, urlencoded } = require("express");
 const router = Router();
 const fs = require("fs");
 const path = require("path");
-
+const { v4: uuid4 } = require("uuid");
 router.use(urlencoded({ extended: true }));
 const booksJSON = path.join(__dirname, "..", "books.json");
 // get
@@ -24,7 +24,10 @@ router.get("/add-book", (req, res) => {
 router.post("/book", (req, res) => {
   try {
     let books = JSON.parse(fs.readFileSync(booksJSON));
-    const newBook = req.body;
+    const newBook = {
+      ...req.body,
+      id: uuid4(),
+    };
     books.push(newBook);
     fs.writeFileSync(booksJSON, JSON.stringify(books));
     res.redirect("/");
