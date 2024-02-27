@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const fs = require("fs");
+const path = require("path");
 const bookJson = require("./router/books.js");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -9,7 +9,7 @@ app.use("/", (req, res, next) => {
 });
 app.use(bookJson);
 app.use("/", (req, res, next) => {
-  res.send("Welcome to web site");
+  res.sendFile(path.join(__dirname,  "views", "server.html"));
 });
 
 const PORT = process.env.PORT || 3000;

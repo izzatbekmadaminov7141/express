@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Book</title>
+</head>
+<body>
+    <h1>Update Book</h1>
+    <form id="updateBookForm">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="username"><br><br>
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author"><br><br>
+        <button type="submit">Update Book</button>
+    </form>
+
+    <script>
+        document.getElementById("updateBookForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Saqlanishni to'xtatish
+            const formData = new FormData(this);
+            const bookId = "your_book_id_here"; // Kitob identifikatorini kiriting
+            const data = {
+                title: formData.get("title"),
+                author: formData.get("author"),
+                price: formData.get("price")
+            };
+            fetch(`/books/${bookId}`, { // Serverga so'rov yuborish
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Kitobni yangilashda xatolik yuz berdi.");
+                }
+                return response.text();
+            })
+            .then(message => {
+                console.log(message); // Serverdan qaytgan xabar
+                // Boshqa amallar uchun kerak bo'lsa, bu yerga qo'shing
+            })
+            .catch(error => {
+                console.error(error);
+                // Xatolikni qaytaring
+            });
+        });
+    </script>
+</body>
+</html>
